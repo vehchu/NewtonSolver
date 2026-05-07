@@ -14,6 +14,9 @@ export default function Header({ activeTab, setActiveTab }: HeaderProps) {
     { id: "calculator", label: "Calculator" },
     { id: "ai-prompt", label: "AI Prompt" },
     { id: "tutorial", label: "Tutorial" },
+    { id: "mary", label: "Mary" },
+    { id: "hailey", label: "Hailey" },
+    { id: "sakura", label: "Sakura" },
   ];
 
   return (
