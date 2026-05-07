@@ -49,21 +49,47 @@ export default function ExplanationPanel({
   const renderMarkdown = (text: string) => {
     const lines = text.split("\n");
     return lines.map((line, i) => {
+      // Strip inline math delimiters $...$ and $$...$$
+      line = line.replace(/\$\$?(.*?)\$\$?/g, "$1");
       // Bold
       line = line.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
+      // Italic
+      line = line.replace(/\*(.*?)\*/g, "<em>$1</em>");
+      // Inline code
+      line = line.replace(/`(.*?)`/g, "<code class='bg-accent/10 px-1 rounded text-xs font-mono'>$1</code>");
+
+      const trimmed = line.trim();
+
+      // H3 heading
+      if (trimmed.startsWith("### ")) {
+        const content = trimmed.replace(/^###\s*/, "");
+        return <h3 key={i} className="font-display font-semibold text-ink text-sm mt-4 mb-1" dangerouslySetInnerHTML={{ __html: content }} />;
+      }
+      // H2 heading
+      if (trimmed.startsWith("## ")) {
+        const content = trimmed.replace(/^##\s*/, "");
+        return <h2 key={i} className="font-display font-semibold text-ink text-base mt-4 mb-1" dangerouslySetInnerHTML={{ __html: content }} />;
+      }
+      // H1 heading
+      if (trimmed.startsWith("# ")) {
+        const content = trimmed.replace(/^#\s*/, "");
+        return <h2 key={i} className="font-display font-semibold text-ink text-base mt-4 mb-1" dangerouslySetInnerHTML={{ __html: content }} />;
+      }
       // Bullet points
-      if (line.trim().startsWith("- ") || line.trim().startsWith("• ")) {
+      if (trimmed.startsWith("- ") || trimmed.startsWith("* ") || trimmed.startsWith("• ")) {
+        const content = line.replace(/^\s*[-*•]\s*/, "");
         return (
-          <li key={i} className="ml-4 list-disc text-ink/80" dangerouslySetInnerHTML={{ __html: line.replace(/^[\-•]\s*/, "") }} />
+          <li key={i} className="ml-5 list-disc text-ink/80" dangerouslySetInnerHTML={{ __html: content }} />
         );
       }
       // Numbered list
-      if (/^\d+\.\s/.test(line.trim())) {
+      if (/^\d+\.\s/.test(trimmed)) {
+        const content = line.replace(/^\s*\d+\.\s/, "");
         return (
-          <li key={i} className="ml-4 list-decimal text-ink/80" dangerouslySetInnerHTML={{ __html: line.replace(/^\d+\.\s/, "") }} />
+          <li key={i} className="ml-5 list-decimal text-ink/80" dangerouslySetInnerHTML={{ __html: content }} />
         );
       }
-      if (!line.trim()) return <br key={i} />;
+      if (!trimmed) return <br key={i} />;
       return <p key={i} className="text-ink/80 leading-relaxed" dangerouslySetInnerHTML={{ __html: line }} />;
     });
   };

@@ -8,6 +8,9 @@ import StepsView from "@/components/StepsView";
 import ExplanationPanel from "@/components/ExplanationPanel";
 import AIPromptTab from "@/components/AIPromptTab";
 import Tutorial from "@/components/Tutorial";
+import MaryTab from "@/components/MaryTab";
+import HaileyTab from "@/components/HaileyTab";
+import SakuraTab from "@/components/SakuraTab";
 import { NewtonResult } from "@/lib/newton";
 import { FileDown, Table2, BarChart3, ListOrdered, Info } from "lucide-react";
 
@@ -140,11 +143,10 @@ export default function Home() {
                           <button
                             key={t.id}
                             onClick={() => setResultTab(t.id)}
-                            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-body font-medium transition-all ${
-                              resultTab === t.id
-                                ? "bg-ink text-paper"
-                                : "text-muted hover:text-ink"
-                            }`}
+                            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-body font-medium transition-all ${resultTab === t.id
+                              ? "bg-ink text-paper"
+                              : "text-muted hover:text-ink"
+                              }`}
                           >
                             {t.icon}
                             {t.label}
@@ -238,6 +240,15 @@ export default function Home() {
             <Tutorial />
           </div>
         )}
+
+        {/* ───────────── MARY'S TAB ───────────── */}
+        {activeTab === "mary" && <MaryTab />}
+
+        {/* ───────────── HAILEY'S TAB ───────────── */}
+        {activeTab === "hailey" && <HaileyTab />}
+
+        {/* ───────────── SAKURA'S TAB ───────────── */}
+        {activeTab === "sakura" && <SakuraTab />}
       </main>
 
       {/* Footer */}
@@ -248,7 +259,7 @@ export default function Home() {
           {" "}· Built with Next.js, Tailwind CSS, mathjs & Gemini AI
         </p>
         <p className="text-xs text-muted mt-1">
-          Developed by Group 4 (Borromeo, Garcia, Samson) · © 2024
+          Developed by Group 5 with ❤️ · © 2026
         </p>
       </footer>
     </div>

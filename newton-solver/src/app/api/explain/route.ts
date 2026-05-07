@@ -21,7 +21,7 @@ export async function POST(req: NextRequest) {
     };
 
     const genAI = new GoogleGenerativeAI(apiKey);
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
     const iterSummary = result.iterations
       .slice(0, 10)
@@ -45,11 +45,18 @@ ${iterSummary}
 
 Please provide:
 1. A brief, clear explanation of what Newton's Method is doing conceptually for this specific function.
-2. Walk through the first 2–3 iterations step-by-step in plain language (show the formula: x_{n+1} = x_n - f(x_n)/f'(x_n)).
+2. Walk through the first 2-3 iterations step-by-step in plain language (show the formula as plain text: x_(n+1) = x_n - f(x_n)/f'(x_n)).
 3. Comment on the convergence behavior (fast? slow? why?).
 4. Any interesting observations about this particular function or result.
 
-Keep your response concise (under 350 words), engaging, and educational. Use simple markdown formatting (bold, bullet points). Do not use LaTeX.`;
+FORMATTING RULES - follow these strictly:
+- Use ### for section headings (e.g. ### What Newton's Method is Doing)
+- Use **bold** for emphasis
+- Use - for bullet points
+- Write all math in plain text only, e.g. x_(n+1), f(x_n), f'(x_n), x^2+1
+- Do NOT use LaTeX or dollar signs ($) for any math
+- Do NOT use backtick code blocks for math
+- Keep response under 350 words`;
 
     const geminiResult = await model.generateContent(prompt);
     const response = geminiResult.response;
