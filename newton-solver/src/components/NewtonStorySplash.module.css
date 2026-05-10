@@ -1,0 +1,398 @@
+/* ─────────────────────────────────────────
+   NewtonStorySplash.module.css
+   Place this file next to NewtonStorySplash.tsx
+   inside your /components directory.
+───────────────────────────────────────── */
+
+@import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
+
+/* ── Wrapper ── */
+.storyWrapper {
+  background-color: #f4f3ed;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+/* ══════════════════════════════════════
+   PARALLAX SPLASH SCENE
+══════════════════════════════════════ */
+.splashScene {
+  position: relative;
+  width: 100%;
+}
+
+.splashScrollDist {
+  height: 200vh;
+  width: 100%;
+}
+
+.fixedScene {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.sceneSvg {
+  max-width: 1200px;
+  width: 100%;
+  height: 100%;
+}
+
+/* SVG text titles */
+.sceneSvg text {
+  font-size: 80px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+}
+
+/* ══════════════════════════════════════
+   STORY BODY
+══════════════════════════════════════ */
+.storyBody {
+  position: relative;
+  z-index: 10;
+  background-color: #f4f3ed;
+  padding: 40px 0;
+}
+
+/* ══════════════════════════════════════
+   HERO TITLE BLOCK
+══════════════════════════════════════ */
+.heroBlock {
+  padding: 80px 40px 60px;
+  max-width: 960px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+/* Horizontal rule that animates via GSAP scaleX */
+.heroLine {
+  width: 56px;
+  height: 2px;
+  background-color: #eb5c39;
+  margin: 0 auto 28px;
+  transform-origin: left center;
+}
+
+/* Small uppercase label above the main title */
+.heroLabel {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: #eb5c39;
+  margin-bottom: 20px;
+}
+
+/* Main display title */
+.heroTitle {
+  font-family: 'DM Sans', sans-serif;
+  font-size: clamp(42px, 7vw, 88px);
+  font-weight: 700;
+  color: #000000;
+  line-height: 1.08;
+  margin-bottom: 28px;
+  overflow: hidden;         /* keeps SplitText chars from shifting layout */
+}
+
+/* Italic styled word inside the title */
+.heroTitle em {
+  font-style: italic;
+  color: #eb5c39;
+}
+
+/* Year range / subtitle */
+.heroSub {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  letter-spacing: 0.12em;
+  color: #000000;
+}
+
+/* Thin divider below the hero block */
+.heroDivider {
+  width: 100%;
+  max-width: 960px;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(212, 168, 67, 0.25) 30%,
+    rgba(212, 168, 67, 0.25) 70%,
+    transparent 100%
+  );
+  margin: 0 auto 20px;
+}
+
+/* ── Section base ── */
+.storySection {
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+/* ── Chapter title ── */
+.title {
+  color: #eb5c39;                          /* gold accent */
+  font-size: 70px;
+  line-height: 98px;
+  font-family: 'DM Sans', sans-serif;
+  padding-top: 60px;
+  padding-bottom: 40px;
+  width: 90%;
+  background-color: transparent;
+  margin: 40px auto;
+  overflow: hidden;
+  box-sizing: border-box;
+  font-kerning: none;
+}
+
+.title span {
+  color: #000000;
+  overflow: hidden;
+}
+
+.title em {
+  font-style: italic;
+  color: #000000;                          /* soft blue for book titles */
+  font-size: 0.75em;
+}
+
+/* ── Cluster container ── */
+.cluster {
+  position: relative;
+  width: 100%;
+  max-width: 874px;
+  height: 792px;
+  margin: 100px auto;
+  background-color: transparent;
+  padding-bottom: 100px;
+}
+
+.clusterPieces {
+  position: absolute;
+}
+
+/* ══════════════════════════════════════
+   CHAPTER 01 — ISAAC NEWTON
+══════════════════════════════════════ */
+.clusterNewton {
+  /* inherits .cluster */
+}
+
+.circleNewton {
+  width: 100%;
+  max-width: 360px;
+  height: 360px;
+  border-radius: 50%;
+  background-color: #eb5c39;              /* gold circle */
+  left: 214px;
+  bottom: 0;
+  z-index: 1;
+}
+
+.dotsGold {
+  width: 100%;
+  height: auto;
+  max-width: 494px;
+  max-height: 434px;
+  z-index: 3;
+  left: 0;
+  top: 80px;
+  /* tint the blue SVG dots to gold via CSS filter */
+  filter: hue-rotate(30deg) saturate(1.4) brightness(1.1);
+}
+
+.portraitNewton {
+  width: 100%;
+  height: auto;
+  max-width: 450px;
+  max-height: 700px;
+  top: 0;
+  right: 0;
+  z-index: 2;
+}
+
+.portraitNewton img {
+  width: 100%;
+  border: 3px solid rgba(212, 168, 67, 0.4);
+  display: block;
+}
+
+/* ══════════════════════════════════════
+   CHAPTER 02 — JOSEPH RAPHSON
+══════════════════════════════════════ */
+.clusterRaphson {
+  max-width: 874px;
+  height: 996px;
+}
+
+.triangle {
+  width: 100%;
+  max-width: 448px;
+  height: 446px;
+  left: -28px;
+  top: 0;
+  z-index: 3;
+  /* tint white triangle to a soft silver-blue */
+  filter: hue-rotate(210deg) saturate(0.4) brightness(0.85);
+}
+
+.dotsWhite {
+  width: 100%;
+  height: auto;
+  max-width: 310px;
+  max-height: 588px;
+  z-index: 2;
+  left: 0;
+  top: 400px;
+}
+
+.portraitRaphson {
+  width: 100%;
+  height: auto;
+  max-width: 674px;
+  max-height: 700px;
+  top: 162px;
+  right: 0;
+  z-index: 1;
+}
+
+/* Raphson has no known portrait — show formula card instead */
+.raphsonPlaceholder {
+  width: 100%;
+  height: 480px;
+  background: linear-gradient(145deg, #f4f3ed 0%, #ffe3a7 60%, #ffc35b 100%);
+  border: 1px solid rgba(212, 168, 67, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+
+
+.raphsonFormula {
+  font-family: 'DM Sans', sans-serif;
+  font-size: clamp(22px, 3vw, 36px);
+  color: #eb5c39;
+  text-align: center;
+  padding: 20px;
+  line-height: 1.6;
+  position: relative;
+  z-index: 1;
+  letter-spacing: 0.02em;
+}
+
+.raphsonFormula sub {
+  font-size: 0.65em;
+  color: #000000;
+}
+
+/* ── Captions (shared) ── */
+.caption {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 14px;
+  line-height: 16px;
+  color: #eb5c39;
+  text-align: right;
+  margin-top: 8px;
+}
+
+.caption span {
+  color: #ffffff;
+}
+
+.captionNewton {
+  /* inherits .caption */
+}
+
+.captionRaphson {
+  /* inherits .caption */
+}
+
+/* ── Spacer ── */
+.spacer {
+  padding-bottom: 300px;
+}
+
+
+
+/* ══════════════════════════════════════
+   RESPONSIVE — 1025px
+══════════════════════════════════════ */
+@media screen and (max-width: 1025px) {
+  .title {
+    font-size: 60px;
+    line-height: 74px;
+    padding-left: 40px;
+  }
+
+  .cluster {
+    max-width: 600px;
+    height: 550px;
+    margin: 20px auto;
+  }
+
+  /* Newton cluster */
+  .dotsGold        { max-width: 340px; left: 0; top: 56px; }
+  .portraitNewton  { max-width: 310px; }
+  .circleNewton    { max-width: 246px; height: 246px; left: 146px; top: 300px; }
+
+  /* Raphson cluster */
+  .clusterRaphson  { max-width: 600px; height: 678px; }
+  .dotsWhite       { max-width: 216px; left: 0; top: 275px; }
+  .portraitRaphson { max-width: 460px; top: 112px; }
+  .triangle        { max-width: 307px; height: 304px; left: -14px; }
+  .raphsonPlaceholder { height: 340px; }
+  .raphsonFormula  { font-size: 20px; }
+}
+
+/* ══════════════════════════════════════
+   RESPONSIVE — 640px
+══════════════════════════════════════ */
+@media screen and (max-width: 640px) {
+  .title { font-size: 44px; line-height: 61px; }
+
+  .cluster         { max-width: 480px; height: 436px; }
+  .dotsGold        { max-width: 274px; left: 0; top: 45px; }
+  .portraitNewton  { max-width: 248px; }
+  .circleNewton    { max-width: 196px; height: 196px; left: 115px; top: 240px; }
+
+  .clusterRaphson  { max-width: 480px; height: 542px; }
+  .dotsWhite       { max-width: 174px; left: 0; top: 220px; }
+  .portraitRaphson { max-width: 369px; top: 88px; }
+  .triangle        { max-width: 240px; height: 240px; left: -10px; }
+  .raphsonPlaceholder { height: 280px; }
+  .raphsonFormula  { font-size: 16px; }
+}
+
+/* ══════════════════════════════════════
+   RESPONSIVE — 540px (stack layout)
+══════════════════════════════════════ */
+@media screen and (max-width: 540px) {
+  .title { font-size: 34px; line-height: 51px; padding-left: 0; }
+
+  .clusterPieces { position: relative; }
+
+  /* Newton cluster — stack mode */
+  .cluster         { max-width: 320px; height: 530px; }
+  .dotsGold        { display: none; }
+  .portraitNewton  { max-width: 320px; top: 0; }
+  .circleNewton    { display: none; }
+  .captionNewton   { float: right; }
+
+  /* Raphson cluster — stack mode */
+  .clusterRaphson  { max-width: 320px; height: 320px; }
+  .dotsWhite       { display: none; }
+  .portraitRaphson { max-width: 320px; top: 0; }
+  .triangle        { display: none; }
+  .captionRaphson  { float: right; top: 0; }
+  .raphsonPlaceholder { height: 220px; }
+  .raphsonFormula  { font-size: 13px; }
+}
