@@ -9,7 +9,6 @@ import ExplanationPanel from "@/components/ExplanationPanel";
 import AIPromptTab from "@/components/AIPromptTab";
 import Tutorial from "@/components/Tutorial";
 import MaryTab from "@/components/MaryTab";
-import HaileyTab from "@/components/HaileyTab";
 import SakuraTab from "@/components/SakuraTab";
 import { NewtonResult } from "@/lib/newton";
 import { FileDown, Table2, BarChart3, ListOrdered, Info } from "lucide-react";
@@ -178,6 +177,7 @@ export default function Home() {
                         <ConvergenceChart
                           iterations={result.iterations}
                           root={result.root}
+                          func={lastParams?.func ?? ""}
                         />
                       )}
                       {resultTab === "steps" && (
@@ -244,11 +244,6 @@ export default function Home() {
         {/* ───────────── MARY'S TAB ───────────── */}
         {activeTab === "mary" && <MaryTab />}
 
-        {/* ───────────── HAILEY'S TAB ───────────── */}
-        {activeTab === "hailey" && <HaileyTab />}
-
-        {/* ───────────── SAKURA'S TAB ───────────── */}
-        {activeTab === "sakura" && <SakuraTab />}
       </main>
 
       {/* Footer */}

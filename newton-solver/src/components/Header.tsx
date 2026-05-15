@@ -15,8 +15,6 @@ export default function Header({ activeTab, setActiveTab }: HeaderProps) {
     { id: "ai-prompt", label: "AI Prompt" },
     { id: "tutorial", label: "Tutorial" },
     { id: "mary", label: "Mary" },
-    { id: "hailey", label: "Hailey" },
-    { id: "sakura", label: "Sakura" },
   ];
 
   return (
@@ -41,11 +39,10 @@ export default function Header({ activeTab, setActiveTab }: HeaderProps) {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`px-4 py-2 rounded-lg text-sm font-body font-medium transition-all ${
-                activeTab === tab.id
-                  ? "bg-ink text-paper"
-                  : "text-muted hover:text-ink hover:bg-ink/5"
-              }`}
+              className={`px-4 py-2 rounded-lg text-sm font-body font-medium transition-all ${activeTab === tab.id
+                ? "bg-ink text-paper"
+                : "text-muted hover:text-ink hover:bg-ink/5"
+                }`}
             >
               {tab.label}
             </button>
@@ -68,11 +65,10 @@ export default function Header({ activeTab, setActiveTab }: HeaderProps) {
             <button
               key={tab.id}
               onClick={() => { setActiveTab(tab.id); setMobileOpen(false); }}
-              className={`w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium mt-1 transition-all ${
-                activeTab === tab.id
-                  ? "bg-ink text-paper"
-                  : "text-muted hover:text-ink hover:bg-ink/5"
-              }`}
+              className={`w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium mt-1 transition-all ${activeTab === tab.id
+                ? "bg-ink text-paper"
+                : "text-muted hover:text-ink hover:bg-ink/5"
+                }`}
             >
               {tab.label}
             </button>
