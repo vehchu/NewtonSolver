@@ -10,6 +10,7 @@ import AIPromptTab from "@/components/AIPromptTab";
 import Tutorial from "@/components/Tutorial";
 import MaryTab from "@/components/MaryTab";
 import SakuraTab from "@/components/SakuraTab";
+import NewtonStorySplash from "@/components/NewtonStorySplash";
 import { NewtonResult } from "@/lib/newton";
 import { FileDown, Table2, BarChart3, ListOrdered, Info } from "lucide-react";
 
@@ -28,6 +29,8 @@ export default function Home() {
     func?: string; x0?: number; tolerance?: number; maxIter?: number;
   } | null>(null);
   const [mounted, setMounted] = useState(false);
+  /** true = splash is showing; false = calculator is visible */
+  const [showSplash, setShowSplash] = useState(true);
 
   useEffect(() => { setMounted(true); }, []);
 
@@ -80,6 +83,10 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-paper">
+      {/* ── SPLASH SCREEN (fixed overlay, dismissed on scroll-through or skip) ── */}
+      {showSplash && (
+        <NewtonStorySplash onDone={() => setShowSplash(false)} />
+      )}
       <Header activeTab={activeTab} setActiveTab={setActiveTab} />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
