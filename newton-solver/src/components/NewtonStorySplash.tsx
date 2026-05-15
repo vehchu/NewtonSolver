@@ -4,9 +4,35 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin";
-import { SplitText } from "gsap/SplitText";
 import styles from "./NewtonStorySplash.module.css";
 import newtonImg from "../assets/newton.jpg";
+
+/**
+ * Manual SplitText fallback: wraps characters/words in spans for animation.
+ * This avoids the dependency on the premium GSAP SplitText plugin.
+ */
+function manualSplit(element: HTMLElement, type: "chars" | "words") {
+  const text = element.innerText;
+  element.innerHTML = "";
+  
+  if (type === "chars") {
+    return text.split("").map(char => {
+      const span = document.createElement("span");
+      span.innerText = char === " " ? "\u00A0" : char;
+      span.style.display = "inline-block";
+      element.appendChild(span);
+      return span;
+    });
+  } else {
+    return text.split(" ").map(word => {
+      const span = document.createElement("span");
+      span.innerText = word + "\u00A0";
+      span.style.display = "inline-block";
+      element.appendChild(span);
+      return span;
+    });
+  }
+}
 
 type NewtonStorySplashProps = {
   /** Called once the user has scrolled to the end of the story. */
@@ -20,7 +46,7 @@ export default function NewtonStorySplash({ onDone }: NewtonStorySplashProps) {
   const scrollIndicatorRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger, ScrollToPlugin, SplitText);
+    gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
     const overlay = overlayRef.current!;
     const container = containerRef.current!;
@@ -61,14 +87,12 @@ export default function NewtonStorySplash({ onDone }: NewtonStorySplashProps) {
 
       /* ─────────────────────────────────────────────
          HERO TITLE — entrance animation on load.
-         Sequence: line draws → label fades → title
-         chars pop in → year range fades up.
       ───────────────────────────────────────────── */
       const heroTitleEl = q(styles.heroTitle);
-      let splitHero: InstanceType<typeof SplitText> | null = null;
+      let heroChars: HTMLElement[] = [];
 
       if (heroTitleEl) {
-        splitHero = new SplitText(heroTitleEl, { type: "words,chars" });
+        heroChars = manualSplit(heroTitleEl, "chars");
       }
 
       const heroTl = gsap.timeline({ delay: 0.3 });
@@ -90,16 +114,15 @@ export default function NewtonStorySplash({ onDone }: NewtonStorySplashProps) {
         );
       }
 
-      if (splitHero) {
+      if (heroChars.length > 0) {
         heroTl.from(
-          splitHero.chars,
+          heroChars,
           {
             opacity: 0,
             y: 22,
             duration: 0.75,
             ease: "circ.out",
             stagger: 0.022,
-            onComplete: () => splitHero!.revert(),
           },
           "-=0.2"
         );
@@ -136,11 +159,11 @@ export default function NewtonStorySplash({ onDone }: NewtonStorySplashProps) {
       }
 
       /* ─────────────────────────────────────────────
-         SPLITTEXT — Newton section title
+         NEWTON SECTION TITLE
       ───────────────────────────────────────────── */
       const newtonTitleEl = q(styles.titleNewton);
       if (newtonTitleEl) {
-        const splitNewton = new SplitText(newtonTitleEl, { type: "words,chars" });
+        const chars = manualSplit(newtonTitleEl, "chars");
         gsap
           .timeline({
             scrollTrigger: {
@@ -149,9 +172,8 @@ export default function NewtonStorySplash({ onDone }: NewtonStorySplashProps) {
               start: "top 80%",
               end: "bottom center",
             },
-            onComplete: () => splitNewton.revert(),
           })
-          .from(splitNewton.chars, {
+          .from(chars, {
             duration: 0.8,
             opacity: 0,
             y: 14,
@@ -161,10 +183,9 @@ export default function NewtonStorySplash({ onDone }: NewtonStorySplashProps) {
       }
 
       /* ─────────────────────────────────────────────
-         CHAPTER 01 — ISAAC NEWTON  (parallax cluster)
+         CHAPTER 01 — ISAAC NEWTON (parallax)
       ───────────────────────────────────────────── */
       const clusterNewton = q(styles.clusterNewton);
-
       if (clusterNewton) {
         const circleEl = q(styles.circleNewton);
         const dotsGoldEl = q(styles.dotsGold);
@@ -174,10 +195,8 @@ export default function NewtonStorySplash({ onDone }: NewtonStorySplashProps) {
         if (circleEl) gsap.set(circleEl, { yPercent: -5 });
         if (dotsGoldEl) gsap.set(dotsGoldEl, { yPercent: 10 });
         if (portraitNewtonEl) gsap.set(portraitNewtonEl, { yPercent: -20 });
-        gsap.set(clusterNewton, { yPercent: 5 });
 
         const stConfig = { trigger: clusterNewton, scroller: container, scrub: 1 };
-
         if (circleEl) gsap.to(circleEl, { yPercent: 5, ease: "none", scrollTrigger: stConfig });
         if (dotsGoldEl) gsap.to(dotsGoldEl, { yPercent: -10, ease: "none", scrollTrigger: stConfig });
         if (portraitNewtonEl) gsap.to(portraitNewtonEl, { yPercent: 20, ease: "none", scrollTrigger: stConfig });
@@ -188,19 +207,14 @@ export default function NewtonStorySplash({ onDone }: NewtonStorySplashProps) {
             scrollTrigger: { ...stConfig, end: "bottom center" },
           });
         }
-        gsap.to(clusterNewton, {
-          yPercent: -5,
-          ease: "none",
-          scrollTrigger: { ...stConfig, end: "bottom center" },
-        });
       }
 
       /* ─────────────────────────────────────────────
-         SPLITTEXT — Raphson section title
+         RAPHSON SECTION TITLE
       ───────────────────────────────────────────── */
       const raphsonTitleEl = q(styles.titleRaphson);
       if (raphsonTitleEl) {
-        const splitRaphson = new SplitText(raphsonTitleEl, { type: "words,chars" });
+        const chars = manualSplit(raphsonTitleEl, "chars");
         gsap
           .timeline({
             scrollTrigger: {
@@ -211,7 +225,7 @@ export default function NewtonStorySplash({ onDone }: NewtonStorySplashProps) {
               scrub: 1,
             },
           })
-          .from(splitRaphson.chars, {
+          .from(chars, {
             duration: 0.8,
             opacity: 0,
             y: 14,
@@ -221,10 +235,9 @@ export default function NewtonStorySplash({ onDone }: NewtonStorySplashProps) {
       }
 
       /* ─────────────────────────────────────────────
-         CHAPTER 02 — JOSEPH RAPHSON  (parallax cluster)
+         CHAPTER 02 — JOSEPH RAPHSON (parallax)
       ───────────────────────────────────────────── */
       const clusterRaphson = q(styles.clusterRaphson);
-
       if (clusterRaphson) {
         const triangleEl = q(styles.triangle);
         const dotsWhiteEl = q(styles.dotsWhite);
@@ -234,16 +247,9 @@ export default function NewtonStorySplash({ onDone }: NewtonStorySplashProps) {
         if (triangleEl) gsap.set(triangleEl, { yPercent: 10, rotation: -90 });
         if (dotsWhiteEl) gsap.set(dotsWhiteEl, { yPercent: 10 });
         if (portraitRaphsonEl) gsap.set(portraitRaphsonEl, { yPercent: -20 });
-        gsap.set(clusterRaphson, { yPercent: 5 });
 
         const stConfigR = { trigger: clusterRaphson, scroller: container, scrub: 1 };
-
-        if (triangleEl) {
-          gsap.to(triangleEl, {
-            yPercent: -5, rotation: 40, ease: "none",
-            scrollTrigger: stConfigR,
-          });
-        }
+        if (triangleEl) gsap.to(triangleEl, { yPercent: -5, rotation: 40, ease: "none", scrollTrigger: stConfigR });
         if (dotsWhiteEl) gsap.to(dotsWhiteEl, { yPercent: -10, ease: "none", scrollTrigger: stConfigR });
         if (portraitRaphsonEl) gsap.to(portraitRaphsonEl, { yPercent: 20, ease: "none", scrollTrigger: stConfigR });
         if (captionRaphsonEl) {
@@ -253,29 +259,20 @@ export default function NewtonStorySplash({ onDone }: NewtonStorySplashProps) {
             scrollTrigger: { ...stConfigR, end: "bottom center" },
           });
         }
-        gsap.to(clusterRaphson, {
-          yPercent: -5,
-          ease: "none",
-          scrollTrigger: { ...stConfigR, end: "bottom center" },
-        });
       }
 
       /* ─────────────────────────────────────────────
-         END TRIGGER — dismiss when spacer is reached
+         END TRIGGER — dismiss when reached
       ───────────────────────────────────────────── */
       const spacerEl = q(styles.spacer);
       if (spacerEl) {
         ScrollTrigger.create({
           trigger: spacerEl,
           scroller: container,
-          start: "top 60%",
+          start: "top bottom", // Trigger as soon as the spacer enters the viewport
           onEnter: () => dismiss(),
         });
       }
-
-      /* ─────────────────────────────────────────────
-         Skip button wired separately (outside context)
-      ───────────────────────────────────────────── */
 
     }, containerRef);
 
@@ -290,126 +287,75 @@ export default function NewtonStorySplash({ onDone }: NewtonStorySplashProps) {
       skipBtn?.removeEventListener("click", handleSkip);
       document.body.style.overflow = "";
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [onDone]);
 
-  /* ═══════════════════════════════════════════════
-     JSX
-  ═══════════════════════════════════════════════ */
   return (
     <div ref={overlayRef} className={styles.splashOverlay}>
-
-      {/* Scroll indicator */}
       <div ref={scrollIndicatorRef} className={styles.scrollIndicator}>
         <div className={styles.scrollDot} />
         <span>scroll</span>
       </div>
 
-      {/* Skip button */}
       <button ref={skipBtnRef} className={styles.skipBtn} aria-label="Skip intro">
         Skip intro <span className={styles.skipArrow}>↓</span>
       </button>
 
-      {/* Scrollable story content */}
       <div ref={containerRef} className={styles.storyWrapper}>
         <div className={styles.storyBody}>
-
-          {/* ── HERO TITLE ── */}
           <div className={styles.heroBlock}>
             <div className={styles.heroLine} />
             <p className={styles.heroLabel}>A brief history</p>
-            <h2 className={styles.heroTitle}>
-              Two Minds,{" "}
-              <em>One Method</em>
-            </h2>
+            <h2 className={styles.heroTitle}>Two Minds, <em>One Method</em></h2>
             <p className={styles.heroSub}>1669 &ndash; 1690</p>
           </div>
 
-          {/* Divider */}
           <div className={styles.heroDivider} />
 
-          {/* ── CHAPTER 01: ISAAC NEWTON ── */}
           <section className={styles.storySection}>
             <div className={`${styles.title} ${styles.titleNewton}`}>
               <span>Isaac Newton</span> laid the groundwork for the method in
-              1669 in his unpublished manuscript{" "}
-              <em>De analysi per aequationes numero terminorum infinitas</em>,
-              where he described a geometric technique for refining roots of
-              polynomial equations one step at a time.
+              1669 in his unpublished manuscript <em>De analysi...</em>,
+              describing a geometric technique for refining roots.
             </div>
           </section>
 
           <section className={`${styles.cluster} ${styles.clusterNewton}`}>
-            {/* Gold decorative circle */}
             <div className={`${styles.clusterPieces} ${styles.circleNewton}`} />
-
-            {/* Newton portrait */}
             <div className={`${styles.clusterPieces} ${styles.portraitNewton}`}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={(newtonImg as { src: string }).src}
-                alt="Portrait of Sir Isaac Newton"
-              />
+              <img src={(newtonImg as { src: string }).src} alt="Isaac Newton" />
               <div className={`${styles.caption} ${styles.captionNewton}`}>
                 <span>/01</span>&nbsp; ISAAC NEWTON · 1669
               </div>
             </div>
-
-            {/* Decorative dots */}
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              className={`${styles.clusterPieces} ${styles.dotsGold}`}
-              src="https://www.micelistudios.com/sandbox/scrolltrigger/imgs/dots_blue_494x434.svg"
-              alt=""
-              aria-hidden="true"
-            />
+            <img className={`${styles.clusterPieces} ${styles.dotsGold}`} 
+                 src="https://www.micelistudios.com/sandbox/scrolltrigger/imgs/dots_blue_494x434.svg" alt="" />
           </section>
 
-          {/* ── CHAPTER 02: JOSEPH RAPHSON ── */}
           <section className={styles.storySection}>
             <div className={`${styles.title} ${styles.titleRaphson}`}>
-              <span>Joseph Raphson</span> published a simpler, independent
-              form of the iteration in 1690 in{" "}
-              <em>Analysis Aequationum Universalis</em>, generalising it
-              beyond polynomials to any differentiable function — giving us
-              the algorithm exactly as it is taught today.
+              <span>Joseph Raphson</span> published a simpler form in 1690,
+              generalising it beyond polynomials to any differentiable function.
             </div>
           </section>
 
           <section className={`${styles.cluster} ${styles.clusterRaphson}`}>
-            {/* Rotating triangle decoration */}
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              className={`${styles.clusterPieces} ${styles.triangle}`}
-              src="https://www.micelistudios.com/sandbox/scrolltrigger/imgs/triangle_448x446.svg"
-              alt=""
-              aria-hidden="true"
-            />
-
-            {/* Raphson formula card */}
+            <img className={`${styles.clusterPieces} ${styles.triangle}`} 
+                 src="https://www.micelistudios.com/sandbox/scrolltrigger/imgs/triangle_448x446.svg" alt="" />
             <div className={`${styles.clusterPieces} ${styles.portraitRaphson}`}>
               <div className={styles.raphsonPlaceholder}>
                 <div className={styles.raphsonFormula}>
-                  x<sub>n+1</sub> = x<sub>n</sub> &minus; f(x<sub>n</sub>) /
-                  f&prime;(x<sub>n</sub>)
+                  x<sub>n+1</sub> = x<sub>n</sub> &minus; f(x<sub>n</sub>) / f&prime;(x<sub>n</sub>)
                 </div>
               </div>
               <div className={`${styles.caption} ${styles.captionRaphson}`}>
                 <span>/02</span>&nbsp; JOSEPH RAPHSON · 1690
               </div>
             </div>
-
-            {/* Decorative white dots */}
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              className={`${styles.clusterPieces} ${styles.dotsWhite}`}
-              src="https://www.micelistudios.com/sandbox/scrolltrigger/imgs/dots_white_310x588.svg"
-              alt=""
-              aria-hidden="true"
-            />
+            <img className={`${styles.clusterPieces} ${styles.dotsWhite}`} 
+                 src="https://www.micelistudios.com/sandbox/scrolltrigger/imgs/dots_white_310x588.svg" alt="" />
           </section>
 
-          {/* Bottom spacer — scroll past this triggers dismiss */}
+          {/* Tall spacer to ensure the ScrollTrigger fires reliably */}
           <section className={styles.spacer} />
         </div>
       </div>
